@@ -1,0 +1,5 @@
+/* Button specific styles */
+.btn-primary {
+    /* Custom primary button styles if needed beyond bootstrap */
+    font-weight: 500;
+}
