@@ -1,20 +1,25 @@
 import mysql from "mysql2/promise";
 
+let connection = null;
+
 const connectDB = async () => {
   try {
-    const connection = await mysql.createConnection({
-      host: process.env.DB_HOST,
-      user: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
+    if (connection) {
+      return connection;
+    }
+
+    connection = await mysql.createConnection({
+      host: process.env.DB_HOST || "localhost",
+      user: process.env.DB_USER || "root",
+      password: process.env.DB_PASSWORD || "",
       database: process.env.DB_NAME,
-      port: process.env.DB_PORT,
+      port: process.env.DB_PORT || 3306,
     });
 
-    console.log(`Connected to MySQL Database: ${process.env.DB_NAME}`);
-
+    console.log("✅ MySQL connected successfully");
     return connection;
   } catch (error) {
-    console.log(`Error in MySQL connection: ${error}`);
+    console.error("❌ MySQL connection failed:", error.message);
     process.exit(1);
   }
 };
