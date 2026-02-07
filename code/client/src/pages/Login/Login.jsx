@@ -20,8 +20,7 @@ const Login = () => {
         }));
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleSubmit = () => {
         console.log('Login Data:', formData);
 
         // Simulate login logic based on email for testing since we don't have backend yet
@@ -46,31 +45,37 @@ const Login = () => {
         <div className="login-container d-flex justify-content-center align-items-center vh-100">
             <Card className="login-card p-4">
                 <h2 className="text-center mb-4">Login</h2>
-                <form onSubmit={handleSubmit}>
-                    <InputField
-                        label="Email"
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        placeholder="Enter Email"
-                        required
-                    />
-                    <InputField
-                        label="Password"
-                        type="password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        placeholder="Enter Password"
-                        required
-                    />
-                    <Button type="submit" className="mt-3">Login</Button>
-                    <div className="text-center mt-3">
+                <div className="row">
+                    <div className="col-12">
+                        <InputField
+                            label="Email"
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            placeholder="Enter Email"
+                            required
+                        />
+                    </div>
+                    <div className="col-12">
+                        <InputField
+                            label="Password"
+                            type="password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            placeholder="Enter Password"
+                            required
+                        />
+                    </div>
+                    <div className="col-12">
+                        <Button type="button" onClick={handleSubmit} className="mt-3">Login</Button>
+                    </div>
+                    <div className="col-12 text-center mt-3">
                         <span className="text-muted">Don't have an account? </span>
                         <a href="/register" className="text-decoration-none">Register</a>
                     </div>
-                </form>
+                </div>
             </Card>
         </div>
     );
