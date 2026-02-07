@@ -2,4 +2,15 @@
 .btn-primary {
     /* Custom primary button styles if needed beyond bootstrap */
     font-weight: 500;
+    background-color: #c5d9Ed;
+    border-color: #c5d9Ed;
+    color: #000;
+    /* Ensure text is readable on light background */
+}
+
+.btn-primary:hover {
+    background-color: #a3c2e0;
+    /* Slightly darker shade for hover */
+    border-color: #a3c2e0;
+    color: #000;
 }

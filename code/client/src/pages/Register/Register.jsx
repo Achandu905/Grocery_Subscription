@@ -21,17 +21,15 @@ const Register = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prevState => ({
-            ...prevState,
+        setFormData(prev => ({
+            ...prev,
             [name]: value
         }));
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const handleRegister = () => {
         console.log('Register Data:', formData);
-        // In a real app, you would send this to an API
-        alert("Registration Successful!");
+        alert('Registration Successful!');
         navigate('/login');
     };
 
@@ -39,73 +37,87 @@ const Register = () => {
         <div className="register-container d-flex justify-content-center align-items-center vh-100">
             <Card className="register-card p-4">
                 <h2 className="text-center mb-4">Register</h2>
-                <form onSubmit={handleSubmit}>
-                    <InputField
-                        label="Full Name"
-                        name="fullName"
-                        value={formData.fullName}
-                        onChange={handleChange}
-                        placeholder="Enter Full Name"
-                        required
-                    />
-                    <InputField
-                        label="Email"
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        placeholder="Enter Email"
-                        required
-                    />
-                    <InputField
-                        label="Mobile"
-                        type="tel"
-                        name="mobile"
-                        value={formData.mobile}
-                        onChange={handleChange}
-                        placeholder="Enter Mobile Number"
-                        required
-                    />
-                    <InputField
-                        label="Password"
-                        type="password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        placeholder="Enter Password"
-                        required
-                    />
-                    <InputField
-                        label="Address"
-                        name="address"
-                        value={formData.address}
-                        onChange={handleChange}
-                        placeholder="Enter Address"
-                        required
-                    />
 
-                    <SelectDropdown
-                        label="Role"
-                        name="role"
-                        value={formData.role}
-                        onChange={handleChange}
-                        options={ROLES}
-                        placeholder="Select Role"
-                        required
-                    />
+                <div className="row">
+                    <div className="col-md-6 mb-3">
+                        <InputField
+                            label="Full Name"
+                            name="fullName"
+                            value={formData.fullName}
+                            onChange={handleChange}
+                            placeholder="Enter Full Name"
+                        />
+                    </div>
 
-                    <SelectDropdown
-                        label="Apartment"
-                        name="apartment"
-                        value={formData.apartment}
-                        onChange={handleChange}
-                        options={APARTMENTS}
-                        placeholder="Select Apartment"
-                        required
-                    />
+                    <div className="col-md-6 mb-3">
+                        <InputField
+                            label="Email"
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            placeholder="Enter Email"
+                        />
+                    </div>
 
-                    <Button type="submit" className="mt-3">Register</Button>
-                </form>
+                    <div className="col-md-6 mb-3">
+                        <InputField
+                            label="Mobile"
+                            type="tel"
+                            name="mobile"
+                            value={formData.mobile}
+                            onChange={handleChange}
+                            placeholder="Enter Mobile Number"
+                        />
+                    </div>
+
+                    <div className="col-md-6 mb-3">
+                        <InputField
+                            label="Password"
+                            type="password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            placeholder="Enter Password"
+                        />
+                    </div>
+
+                    <div className="col-md-6 mb-3">
+                        <InputField
+                            label="Address"
+                            name="address"
+                            value={formData.address}
+                            onChange={handleChange}
+                            placeholder="Enter Address"
+                        />
+                    </div>
+
+                    <div className="col-md-6 mb-3">
+                        <SelectDropdown
+                            label="Role"
+                            name="role"
+                            value={formData.role}
+                            onChange={handleChange}
+                            options={ROLES}
+                            placeholder="Select Role"
+                        />
+                    </div>
+
+                    <div className="col-md-6 mb-3">
+                        <SelectDropdown
+                            label="Apartment"
+                            name="apartment"
+                            value={formData.apartment}
+                            onChange={handleChange}
+                            options={APARTMENTS}
+                            placeholder="Select Apartment"
+                        />
+                    </div>
+                </div>
+
+                <Button className="mt-3" onClick={handleRegister}>
+                    Register
+                </Button>
             </Card>
         </div>
     );

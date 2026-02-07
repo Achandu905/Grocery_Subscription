@@ -14,21 +14,14 @@ const Login = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prevState => ({
-            ...prevState,
+        setFormData(prev => ({
+            ...prev,
             [name]: value
         }));
     };
 
-    const handleSubmit = () => {
+    const handleLogin = () => {
         console.log('Login Data:', formData);
-
-        // Simulate login logic based on email for testing since we don't have backend yet
-        // In a real app, response would contain role
-        // For demo purposes:
-        // admin@test.com -> Admin
-        // vendor@test.com -> Vendor
-        // user@test.com -> User (default)
 
         const email = formData.email.toLowerCase();
 
@@ -45,8 +38,9 @@ const Login = () => {
         <div className="login-container d-flex justify-content-center align-items-center vh-100">
             <Card className="login-card p-4">
                 <h2 className="text-center mb-4">Login</h2>
+
                 <div className="row">
-                    <div className="col-12">
+                    <div className="col-12 mb-3">
                         <InputField
                             label="Email"
                             type="email"
@@ -54,10 +48,10 @@ const Login = () => {
                             value={formData.email}
                             onChange={handleChange}
                             placeholder="Enter Email"
-                            required
                         />
                     </div>
-                    <div className="col-12">
+
+                    <div className="col-12 mb-3">
                         <InputField
                             label="Password"
                             type="password"
@@ -65,15 +59,24 @@ const Login = () => {
                             value={formData.password}
                             onChange={handleChange}
                             placeholder="Enter Password"
-                            required
                         />
                     </div>
+
                     <div className="col-12">
-                        <Button type="button" onClick={handleSubmit} className="mt-3">Login</Button>
+                        <Button className="mt-2" onClick={handleLogin}>
+                            Login
+                        </Button>
                     </div>
+
                     <div className="col-12 text-center mt-3">
                         <span className="text-muted">Don't have an account? </span>
-                        <a href="/register" className="text-decoration-none">Register</a>
+                        <span
+                            className="text-primary cursor-pointer"
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => navigate('/register')}
+                        >
+                            Register
+                        </span>
                     </div>
                 </div>
             </Card>
