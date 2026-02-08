@@ -24,12 +24,15 @@ export const registerUser = async (req, res) => {
     }
     const existingUser = await userService.getUserByEmail(data.email);
     if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
+      return res
+        .status(400)
+        .json({ message: "User already exists", success: false });
     }
     const result = await userService.registerUser(data);
     if (result) {
       res.status(201).json({
         message: "User registered successfully!",
+        success: true,
         userId: result.insertId,
       });
     }
@@ -42,16 +45,22 @@ export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
-      return res.status(400).json({ error: "Email and password are required" });
+      return res
+        .status(400)
+        .json({ message: "Email and password are required", success: false });
     }
     const user = await userService.getUserByEmail(email);
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res
+        .status(404)
+        .json({ message: "User not found", success: false });
     }
     const isPasswordValid = await comparePassword(password, user.password_hash);
     console.log("Password validation result:", isPasswordValid);
     if (!isPasswordValid) {
-      return res.status(401).json({ message: "Password or Email invalid" });
+      return res
+        .status(401)
+        .json({ message: "Password or Email invalid", success: false });
     }
     const token = JWT.sign(
       { id: user.id, role: user.role_id },
@@ -61,6 +70,7 @@ export const loginUser = async (req, res) => {
 
     res.status(200).json({
       message: "Login successful",
+      success: true,
       user: { ...user },
       token,
     });
@@ -74,12 +84,16 @@ export const forgotPasswordController = async (req, res) => {
     const { email } = req.body;
 
     if (!email) {
-      return res.status(400).json({ message: "Email is required" });
+      return res
+        .status(400)
+        .json({ message: "Email is required", success: false });
     }
 
     const user = await userService.getUserByEmail(email);
     if (!user) {
-      return res.status(404).json({ message: "Email not registered" });
+      return res
+        .status(404)
+        .json({ message: "Email not registered", success: false });
     }
 
     // Generate OTP
@@ -90,19 +104,23 @@ export const forgotPasswordController = async (req, res) => {
     // Store hashed OTP
     const stored = await userService.storeOtp(email, hashedOtp, expiry);
     if (!stored) {
-      return res.status(500).json({ message: "Failed to store OTP" });
+      return res
+        .status(500)
+        .json({ message: "Failed to store OTP", success: false });
     }
 
     // Send plain OTP
     const emailSent = await sendOtpEmail(email, otp);
     if (!emailSent) {
-      return res.status(500).json({ message: "Failed to send OTP email" });
+      return res
+        .status(500)
+        .json({ message: "Failed to send OTP email", success: false });
     }
 
-    res.json({ message: "OTP sent to email" });
+    res.json({ message: "OTP sent to email", success: true });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Something went wrong" });
+    res.status(500).json({ message: "Something went wrong", success: false });
   }
 };
 
@@ -112,7 +130,10 @@ export const resetPasswordController = async (req, res) => {
     if (!email || !otp || !newPassword) {
       return res
         .status(400)
-        .json({ message: "Email, OTP and new password are required" });
+        .json({
+          message: "Email, OTP and new password are required",
+          success: false,
+        });
     }
 
     const user = await userService.getUserByEmail(email);
@@ -121,11 +142,11 @@ export const resetPasswordController = async (req, res) => {
     const isOtpValid = await compareOTP(otp, user.reset_otp);
     console.log("OTP comparison result:", isOtpValid);
     if (!user || !isOtpValid) {
-      return res.status(400).json({ message: "Invalid OTP" });
+      return res.status(400).json({ message: "Invalid OTP", success: false });
     }
 
     if (new Date(user.reset_otp_expiry) < new Date()) {
-      return res.status(400).json({ message: "OTP expired" });
+      return res.status(400).json({ message: "OTP expired", success: false });
     }
     console.log("Updating password for user ID:", user.id);
     const updatePasswordResult = await userService.updatePassword(
@@ -134,11 +155,13 @@ export const resetPasswordController = async (req, res) => {
     );
 
     if (!updatePasswordResult) {
-      return res.status(500).json({ message: "Failed to update password" });
+      return res
+        .status(500)
+        .json({ message: "Failed to update password", success: false });
     }
 
-    res.json({ message: "Password updated successfully" });
+    res.json({ message: "Password updated successfully", success: true });
   } catch (error) {
-    res.status(500).json({ message: "Reset failed" });
+    res.status(500).json({ message: "Reset failed", success: false });
   }
 };
