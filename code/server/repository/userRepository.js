@@ -62,3 +62,17 @@ export const deleteUser = async (id) => {
   const [result] = await connectDB.execute(query, [id]);
   return result;
 };
+
+export const storeOtp = async (email, otp, expiry) => {
+  const connectDB = await db();
+  const query = `UPDATE users SET reset_otp = ?, reset_otp_expiry = ? WHERE email = ?`;
+  const [result] = await connectDB.execute(query, [otp, expiry, email]);
+  return result;
+};
+
+export const updatePassword = async (id, newPassword) => {
+  const connectDB = await db();
+  const query = `UPDATE users SET password_hash = ?, reset_otp = NULL, reset_otp_expiry = NULL WHERE id = ?`;
+  const [result] = await connectDB.execute(query, [newPassword, id]);
+  return result;
+};

@@ -27,3 +27,12 @@ export const getAllUsers = async () => {
 export const deleteUser = async (id) => {
   return await userRepository.deleteUser(id);
 };
+
+export const storeOtp = async (email, otp, expiry) => {
+  return await userRepository.storeOtp(email, otp, expiry);
+};
+
+export const updatePassword = async (id, newPassword) => {
+  const hashedPassword = await hashPassword(newPassword);
+  return await userRepository.updatePassword(id, hashedPassword);
+};

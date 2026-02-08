@@ -1,5 +1,10 @@
 import express from "express";
-import { loginUser, registerUser } from "../Controllers/authController.js";
+import {
+  forgotPasswordController,
+  loginUser,
+  registerUser,
+  resetPasswordController,
+} from "../controllers/authController.js";
 import { requireSignIn } from "../middlewares/authMiddlewares.js";
 
 const router = express.Router();
@@ -9,6 +14,9 @@ router.post("/register", registerUser);
 
 // Login user
 router.post("/login", loginUser);
+
+router.post("/forgot-password", forgotPasswordController);
+router.post("/reset-password", resetPasswordController);
 
 // Test route to verify authentication
 router.get("/test", requireSignIn, (req, res) => {
