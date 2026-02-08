@@ -1,11 +1,11 @@
 import React from 'react';
 import './Button.css';
 
-const Button = ({ children, type = "button", onClick, className = '', disabled = false }) => {
+const Button = ({ children, type = "button", onClick, className = '', disabled = false, fullWidth = true }) => {
     return (
         <button
             type={type}
-            className={`btn btn-primary w-100 ${className}`}
+            className={`btn btn-primary ${fullWidth ? 'w-100' : ''} ${className}`}
             onClick={onClick}
             disabled={disabled}
         >

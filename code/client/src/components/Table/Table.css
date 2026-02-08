@@ -1,0 +1,47 @@
+.table-responsive {
+    overflow-x: auto;
+}
+
+.pagination-btn {
+    background-color: #000;
+    /* Default Black */
+    color: #fff;
+    /* Default White */
+    border: 1px solid #000;
+    font-weight: bold;
+    min-width: 35px;
+    transition: all 0.3s ease;
+}
+
+.pagination-btn.active {
+    background-color: #fff;
+    /* Active White */
+    color: #000;
+    /* Active Black */
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background-color: #333;
+    color: #fff;
+}
+
+.pagination-btn:disabled {
+    background-color: #ccc;
+    color: #666;
+    border-color: #ccc;
+    cursor: not-allowed;
+}
+
+.action-menu {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    border: none;
+}
+
+.action-menu .dropdown-item {
+    cursor: pointer;
+    padding: 8px 16px;
+}
+
+.action-menu .dropdown-item:hover {
+    background-color: #f8f9fa;
+}

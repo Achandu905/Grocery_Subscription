@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
+
+.navbar-brand {
+    cursor: pointer;
+    font-weight: bold;
+    font-family: 'Open Sans', sans-serif;
+    color: #fff !important;
+    /* White text */
+}
+
+/* Auth Header Buttons */
+.auth-header-btn {
+    background-color: transparent !important;
+    border: none !important;
+    color: #fff !important;
+    /* White text */
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.auth-header-btn:hover {
+    color: #ddd !important;
+    /* Light gray on hover */
+}
+
+/* Fixed Header behavior is handled by Bootstrap 'fixed-top' class */
