@@ -31,8 +31,14 @@ const Login = () => {
 
     const validate = () => {
         const newErrors = {};
-        if (!formData.email) newErrors.email = 'Email is required';
-        if (!formData.password) newErrors.password = 'Password is required';
+        if (!formData.email) {
+            newErrors.email = 'Email is required';
+            return newErrors;
+        }
+        if (!formData.password) {
+            newErrors.password = 'Password is required';
+            return newErrors;
+        }
         return newErrors;
     };
 
