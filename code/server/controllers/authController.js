@@ -1,6 +1,6 @@
 import JWT from "jsonwebtoken";
 import { comparePassword } from "../helpers/authHelper.js";
-import * as authService from "../service/authService.js";
+import * as authService from "../service/userService.js";
 
 export const registerUser = async (req, res) => {
   const data = req.body;
@@ -51,6 +51,7 @@ export const loginUser = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: "1h" },
     );
+    console.log("Generated JWT token:", token);
     res.status(200).json({
       message: "Login successful",
       user: { ...user },

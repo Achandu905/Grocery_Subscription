@@ -31,3 +31,34 @@ export const getUserByEmail = async (email) => {
 
   return rows[0];
 };
+
+export const getAllUsers = async () => {
+  const connectDB = await db();
+  const query = `SELECT * FROM users`;
+  const [rows] = await connectDB.execute(query);
+  return rows;
+};
+
+export const updateUser = async (id, data) => {
+  const connectDB = await db();
+  const query = `UPDATE users SET name = ?, email = ?, phone = ?, address = ?, pincode = ?, password_hash = ?, role_id = ?, apartment_id = ? WHERE id = ?`;
+  const [result] = await connectDB.execute(query, [
+    data.name,
+    data.email,
+    data.phone,
+    data.address,
+    data.pincode,
+    data.password,
+    data.role_id,
+    data.apartment_id ?? null,
+    id,
+  ]);
+  return result;
+};
+
+export const deleteUser = async (id) => {
+  const connectDB = await db();
+  const query = `DELETE FROM users WHERE id = ?`;
+  const [result] = await connectDB.execute(query, [id]);
+  return result;
+};
