@@ -1,0 +1,42 @@
+.sidenav {
+    width: 250px;
+    min-width: 250px;
+    position: fixed;
+    top: 56px;
+    /* Height of the navbar */
+    bottom: 0;
+    left: 0;
+    overflow-y: auto;
+    z-index: 100;
+    transition: width 0.3s ease, min-width 0.3s ease;
+}
+
+.sidenav.closed {
+    width: 60px;
+    min-width: 60px;
+    padding: 10px !important;
+}
+
+.sidenav.closed .sidenav-btn {
+    text-align: center !important;
+    padding: 0.5rem !important;
+}
+
+.sidenav.closed h4 {
+    display: none;
+}
+
+.sidenav .btn-light:hover {
+    background-color: #e2e6ea;
+}
+
+.sidenav-btn {
+    background-color: transparent;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.sidenav-btn:hover {
+    background-color: #fff !important;
+    color: #000 !important;
+}

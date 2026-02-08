@@ -5,15 +5,44 @@
   text-align: center;
 }
 
+/* Global Main Content Padding for Fixed Header */
+main,
+.register-container,
+.login-container {
+  padding-top: 60px;
+  /* Adjust based on Header height */
+}
+
+/* SideNav handling moved to SideNav.css */
+
+/* Dashboard Main Content Fixed Layout */
+.dashboard-main {
+  position: fixed;
+  top: 56px;
+  /* Header Height */
+  left: 250px;
+  /* SideNav Width */
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
+  /* Internal scrolling */
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+  /* bg-light */
+  z-index: 1;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
@@ -22,6 +51,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
