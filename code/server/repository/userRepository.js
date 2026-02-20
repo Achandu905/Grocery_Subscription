@@ -41,7 +41,7 @@ export const getAllUsers = async () => {
 
 export const updateUser = async (id, data) => {
   const connectDB = await db();
-  const query = `UPDATE users SET name = ?, email = ?, phone = ?, address = ?, pincode = ?, password_hash = ?, role_id = ?, apartment_id = ? WHERE id = ?`;
+  const query = `UPDATE users SET name = ?, email = ?, phone = ?, address = ?, pincode = ?, password_hash = COALESCE(?, password_hash), role_id = ?, apartment_id = ? WHERE id = ?`;
   const [result] = await connectDB.execute(query, [
     data.name,
     data.email,
