@@ -9,18 +9,20 @@ export const updateUser = async (req, res) => {
     if (result.affectedRows === 0) {
       return res.status(404).json({ message: "User not found" });
     }
-    res.status(200).json({ message: "User updated successfully" });
+    res
+      .status(200)
+      .json({ message: "User updated successfully", success: true });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message, success: false });
   }
 };
 
 export const getAllUsers = async (req, res) => {
   try {
     const users = await userService.getAllUsers();
-    res.status(200).json(users);
+    res.status(200).json({ users, success: true });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message, success: false });
   }
 };
 
@@ -30,10 +32,14 @@ export const deleteUser = async (req, res) => {
     const result = await userService.deleteUser(userId);
 
     if (result.affectedRows === 0) {
-      return res.status(404).json({ message: "User not found" });
+      return res
+        .status(404)
+        .json({ message: "User not found", success: false });
     }
-    res.status(200).json({ message: "User deleted successfully" });
+    res
+      .status(200)
+      .json({ message: "User deleted successfully", success: true });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message, success: false });
   }
 };

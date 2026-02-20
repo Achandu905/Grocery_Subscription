@@ -6,6 +6,7 @@ import express from "express";
 import morgan from "morgan";
 import apartmentRoutes from "./routes/apartmentsRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import productRoutes from "./routes/productRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 
 const app = express();
@@ -19,6 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/user", userRoutes);
 app.use("/api/v1/apartments", apartmentRoutes);
+app.use("/api/v1/products", productRoutes);
 
 const PORT = process.env.PORT || 8081;
 app.listen(PORT, () => {
