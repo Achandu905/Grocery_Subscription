@@ -1,23 +1,24 @@
 import express from "express";
 import {
-    createProductController,
-    deleteProductController,
-    getAllProductsController,
-    getProductByIdController,
-    getProductsByVendorIdController,
-    toggleProductStatusController,
-    updateProductController,
-    updateStockController,
+  createProductController,
+  deleteProductController,
+  getAllProductsController,
+  getProductByIdController,
+  getProductsByVendorIdController,
+  toggleProductStatusController,
+  updateProductController,
+  updateStockController,
 } from "../controllers/productController.js";
 import { requireSignIn } from "../middlewares/authMiddlewares.js";
+import { attachProductImageUrl } from "../middlewares/productImageUploadMiddleware.js";
 
 const router = express.Router();
 
 // Create product
-router.post("/", requireSignIn, createProductController);
+router.post("/", requireSignIn, attachProductImageUrl, createProductController);
 
 // Update product
-router.put("/:id", requireSignIn, updateProductController);
+router.put("/:id", requireSignIn, attachProductImageUrl, updateProductController);
 
 // Get all products
 router.get("/", requireSignIn, getAllProductsController);
