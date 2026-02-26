@@ -5,8 +5,8 @@ export const addProduct = async (data) => {
   const connectDB = await db();
   const query = `
     INSERT INTO products 
-    (vendor_id, name, price, unit, stock, is_active) 
-    VALUES (?, ?, ?, ?, ?, ?)
+    (vendor_id, name, price, unit, stock, is_active, image_url) 
+    VALUES (?, ?, ?, ?, ?, ?, ?)
   `;
   const [result] = await connectDB.execute(query, [
     data.vendor_id,
@@ -15,6 +15,7 @@ export const addProduct = async (data) => {
     data.unit,
     data.stock,
     data.is_active ?? 1,
+    data.image_url ?? null,
   ]);
   return result;
 };
@@ -48,7 +49,7 @@ export const updateProduct = async (id, data) => {
   const connectDB = await db();
   const query = `
     UPDATE products
-    SET vendor_id = ?, name = ?, price = ?, unit = ?, stock = ?, is_active = ?
+    SET vendor_id = ?, name = ?, price = ?, unit = ?, stock = ?, is_active = ?, image_url = COALESCE(?, image_url)
     WHERE id = ?
   `;
   const [result] = await connectDB.execute(query, [
@@ -58,6 +59,7 @@ export const updateProduct = async (id, data) => {
     data.unit,
     data.stock,
     data.is_active,
+    data.image_url ?? null,
     id,
   ]);
   return result;
