@@ -11,14 +11,26 @@ import {
 } from "../controllers/productController.js";
 import { requireSignIn } from "../middlewares/authMiddlewares.js";
 import { attachProductImageUrl } from "../middlewares/productImageUploadMiddleware.js";
+import { upload } from "../middlewares/uploadMiddleware.js";
 
 const router = express.Router();
 
 // Create product
-router.post("/", requireSignIn, attachProductImageUrl, createProductController);
+router.post(
+  "/",
+  requireSignIn,
+  upload.single("image"),
+  attachProductImageUrl,
+  createProductController,
+);
 
 // Update product
-router.put("/:id", requireSignIn, attachProductImageUrl, updateProductController);
+router.put(
+  "/:id",
+  requireSignIn,
+  attachProductImageUrl,
+  updateProductController,
+);
 
 // Get all products
 router.get("/", requireSignIn, getAllProductsController);

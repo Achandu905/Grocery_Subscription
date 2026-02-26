@@ -1,28 +1,17 @@
-import { uploadImageToCloudinary } from "../config/cloudinary.js";
-
-const isValidImageInput = (image) => {
-  return typeof image === "string" && image.trim().length > 0;
-};
+import { uploadImageToCloudinary } from "../service/cloudinaryService.js";
 
 export const attachProductImageUrl = async (req, res, next) => {
   try {
-    const image = req.body.image;
-
-    if (!isValidImageInput(image)) {
+    if (!req.file) {
       return next();
     }
-
-    const uploadResult = await uploadImageToCloudinary(image);
+    console.log(req.file.buffer);
+    const uploadResult = await uploadImageToCloudinary(req.file.buffer);
 
     req.body.image_url = uploadResult.secure_url;
-    delete req.body.image;
 
-    return next();
+    next();
   } catch (error) {
-    return res.status(500).json({
-      message: "Failed to upload product image",
-      success: false,
-      error: error.message,
-    });
+    next(error);
   }
 };

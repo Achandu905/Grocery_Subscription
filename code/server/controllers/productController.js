@@ -1,32 +1,35 @@
 import * as productService from "../service/productService.js";
 
 /* CREATE PRODUCT */
-export const createProductController = async (req, res) => {
+export const createProductController = async (req, res, next) => {
   try {
-    const data = req.body;
-    data.vendor_id = req.user.id;
-    if (
-      !data.vendor_id ||
-      !data.name ||
-      data.price === undefined ||
-      !data.unit ||
-      data.stock === undefined ||
-      data.vendor_id === ""
-    ) {
-      return res
-        .status(400)
-        .json({ message: "Missing required fields", success: false });
+    const { name, price, unit, stock, image_url } = req.body;
+
+    if (!name || price === undefined || !unit || stock === undefined) {
+      return res.status(400).json({
+        success: false,
+        message: "Missing required fields",
+      });
     }
+
+    const data = {
+      name,
+      price,
+      unit,
+      stock,
+      image_url: image_url || null,
+      vendor_id: req.user.id,
+    };
 
     const result = await productService.createProduct(data);
 
     res.status(201).json({
-      message: "Product created successfully!",
       success: true,
+      message: "Product created successfully",
       productId: result.insertId,
     });
   } catch (error) {
-    res.status(500).json({ message: error.message, success: false });
+    next(error);
   }
 };
 

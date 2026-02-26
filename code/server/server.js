@@ -1,13 +1,22 @@
-import cors from "cors";
+
 import dotenv from "dotenv";
 dotenv.config();
 
+import "./config/cloudinary.js";
+console.log("ENV CHECK:", process.env.CLOUDINARY_API_KEY);
+
+import cors from "cors";
 import express from "express";
 import morgan from "morgan";
+
+
+
 import apartmentRoutes from "./routes/apartmentsRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+
+
 
 const app = express();
 // middlewares
