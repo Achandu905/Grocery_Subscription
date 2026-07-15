@@ -11,12 +11,12 @@ import morgan from "morgan";
 
 
 
-import apartmentRoutes from "./routes/apartmentsRoutes.js";
-import authRoutes from "./routes/authRoutes.js";
-import oderRoutes from "./routes/orderRoutes.js";
-import productRoutes from "./routes/productRoutes.js";
-import subscriptionRoutes from "./routes/subscriptionRoutes.js";
-import userRoutes from "./routes/userRoutes.js";
+import apartmentRoutes from "./Routes/apartmentsRoutes.js";
+import authRoutes from "./Routes/authRoutes.js";
+import oderRoutes from "./Routes/orderRoutes.js";
+import productRoutes from "./Routes/productRoutes.js";
+import subscriptionRoutes from "./Routes/subscriptionRoutes.js";
+import userRoutes from "./Routes/userRoutes.js";
 
 
 
