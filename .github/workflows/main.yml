@@ -61,6 +61,7 @@ jobs:
             ${{ steps.image.outputs.name }}:${{ github.sha }}
 
   deploy:
+    runs-on: [self-hosted, Linux, X64]
     name: Deploy to WSL Ubuntu
     needs: build-and-publish
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
