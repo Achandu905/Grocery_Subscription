@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   build-and-publish:
-    # Only publish from main; pull requests should validate the build.
+    name: Build and Publish Docker Image
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
 
@@ -38,13 +38,18 @@ jobs:
         working-directory: code/server
         run: docker build -t grocery-server:test .
 
-      - name: Log in to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+      - name: Log in to GitHub Container Registry
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "$GHCR_TOKEN" | docker login ghcr.io \
+            -u "$GITHUB_ACTOR" --password-stdin
 
       - name: Set image name
         id: image
         shell: bash
-        run: echo "name=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
+        run: |
+          echo "name=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
 
       - name: Build and publish Docker image
         uses: docker/build-push-action@v6
@@ -54,7 +59,8 @@ jobs:
           tags: |
             ${{ steps.image.outputs.name }}:latest
             ${{ steps.image.outputs.name }}:${{ github.sha }}
-    deploy:
+
+  deploy:
     name: Deploy to WSL Ubuntu
     needs: build-and-publish
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
@@ -65,7 +71,7 @@ jobs:
       packages: read
 
     steps:
-      - name: Log in to GHCR
+      - name: Log in to GitHub Container Registry
         env:
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -73,28 +79,37 @@ jobs:
             -u "$GITHUB_ACTOR" --password-stdin
 
       - name: Pull Docker image
+        shell: bash
         run: |
           IMAGE="ghcr.io/${GITHUB_REPOSITORY,,}"
           docker pull "$IMAGE:$GITHUB_SHA"
 
       - name: Deploy container
+        shell: bash
         run: |
+          set -e
+
           IMAGE="ghcr.io/${GITHUB_REPOSITORY,,}"
 
+          # Remove the previous container if one exists.
           docker rm -f grocery-server 2>/dev/null || true
 
+          # Start the new application container.
           docker run -d \
             --name grocery-server \
             --restart unless-stopped \
             -p 8081:8081 \
             "$IMAGE:$GITHUB_SHA"
 
+          # Allow the application time to start.
           sleep 5
 
+          # Fail the deployment if the container has stopped.
           if [ "$(docker inspect -f '{{.State.Running}}' grocery-server)" != "true" ]; then
             docker logs grocery-server
             exit 1
           fi
 
+          echo "Container is running."
           docker ps --filter name=grocery-server
           docker logs --tail 50 grocery-server
