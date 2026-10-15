@@ -1,4 +1,4 @@
-name: Node.js CI
+name: Node.js CI/CD
 
 on:
   push:
@@ -10,12 +10,14 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  build-and-publish:
+    # Only publish from main; pull requests should validate the build.
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: code/server
+    permissions:
+      contents: read
+      packages: write
 
     steps:
       - name: Checkout code
@@ -28,15 +30,27 @@ jobs:
           cache: npm
           cache-dependency-path: code/server/package-lock.json
 
-      - name: Verify project files
-        run: |
-          pwd
-          ls -la
-          test -f package.json
-          test -f package-lock.json
-
       - name: Install dependencies
+        working-directory: code/server
         run: npm ci
 
       - name: Build Docker image
+        working-directory: code/server
         run: docker build -t grocery-server:test .
+
+      - name: Log in to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+
+      - name: Set image name
+        id: image
+        shell: bash
+        run: echo "name=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_OUTPUT"
+
+      - name: Build and publish Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./code/server
+          push: true
+          tags: |
+            ${{ steps.image.outputs.name }}:latest
+            ${{ steps.image.outputs.name }}:${{ github.sha }}
