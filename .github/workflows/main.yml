@@ -54,3 +54,47 @@ jobs:
           tags: |
             ${{ steps.image.outputs.name }}:latest
             ${{ steps.image.outputs.name }}:${{ github.sha }}
+    deploy:
+    name: Deploy to WSL Ubuntu
+    needs: build-and-publish
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: [self-hosted, linux, x64, cicd-vm]
+
+    permissions:
+      contents: read
+      packages: read
+
+    steps:
+      - name: Log in to GHCR
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "$GHCR_TOKEN" | docker login ghcr.io \
+            -u "$GITHUB_ACTOR" --password-stdin
+
+      - name: Pull Docker image
+        run: |
+          IMAGE="ghcr.io/${GITHUB_REPOSITORY,,}"
+          docker pull "$IMAGE:$GITHUB_SHA"
+
+      - name: Deploy container
+        run: |
+          IMAGE="ghcr.io/${GITHUB_REPOSITORY,,}"
+
+          docker rm -f grocery-server 2>/dev/null || true
+
+          docker run -d \
+            --name grocery-server \
+            --restart unless-stopped \
+            -p 8081:8081 \
+            "$IMAGE:$GITHUB_SHA"
+
+          sleep 5
+
+          if [ "$(docker inspect -f '{{.State.Running}}' grocery-server)" != "true" ]; then
+            docker logs grocery-server
+            exit 1
+          fi
+
+          docker ps --filter name=grocery-server
+          docker logs --tail 50 grocery-server
